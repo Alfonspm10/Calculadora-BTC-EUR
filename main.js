@@ -40,6 +40,19 @@ cryptoInput.onchange = ()=>calc('crypto')
 fiatselect.onchange = ()=>calc('crypto')
 crytoselect.onchange = ()=>calc()
       
-const res = await fetch(`https://api.coindesk.com/v1/bpi/currentprice/${fiat.toLowerCase()}.json`)
-const json = await res.json() 
-const exchangeRate = parseInt(json.bpi[fiat].rate_float)
+async function calc(changer){
+    const fiat = fiatselect.value
+    const cryptoVal = Number(cryptoInput.value)
+    const fiatVal = Number(fiatInput.value) 
+    const res = await fetch(`https://api.coindesk.com/v1/bpi/currentprice/${fiat.toLowerCase()}.json`)
+    const json = await res.json() 
+    const exchangeRate = parseInt(json.bpi[fiat].rate_float)
+    if(changer==='crypto'){
+        const amount =  cryptoVal * exchangeRate 
+        fiatInput.value = parseFloat(amount).toFixed(2)
+    }else{
+        const amount =  fiatVal / exchangeRate 
+        cryptoInput.value = amount
+        } 
+}
+      
